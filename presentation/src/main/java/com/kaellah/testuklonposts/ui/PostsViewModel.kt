@@ -3,6 +3,7 @@ package com.kaellah.testuklonposts.ui
 import android.support.v7.util.DiffUtil
 import android.support.v7.util.DiffUtil.DiffResult
 import com.artemkopan.utils.CollectionUtils
+import com.kaellah.domain.interactor.post.GetPostsUseCase
 import com.kaellah.testuklonposts.viewmodel.BaseViewModel
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -12,7 +13,7 @@ import javax.inject.Inject
 /**
  * @since 12/20/17
  */
-class PostsViewModel @Inject constructor() : BaseViewModel() {
+class PostsViewModel @Inject constructor(private val getPostsUseCase: GetPostsUseCase) : BaseViewModel() {
 
     init {
 //        getMoviesUseCase.clearedDisposable = onClearedDisposable

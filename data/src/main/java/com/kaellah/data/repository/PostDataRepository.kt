@@ -10,7 +10,7 @@ import io.reactivex.Single
  */
 class PostDataRepository(private val apiService: PostsService) : PostsRepository {
 
-    override fun getPosts(page: Int): Single<List<PostEntity>> {
+    override fun getPosts(): Single<List<PostEntity>> {
         return Single.never() // apiService.getPosts().subscribeOn(Schedulers.io())
     }
 }
