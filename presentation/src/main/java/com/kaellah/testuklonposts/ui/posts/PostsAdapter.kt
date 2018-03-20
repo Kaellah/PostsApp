@@ -15,7 +15,7 @@ class PostsAdapter @Inject constructor() : RecyclerListAdapter<PostEntity, PostV
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val holder = PostViewHolder(ViewUtils.inflateView(parent, R.layout.item_view_post))
-        holder.root.setOnClickListener { callOnItemClick(holder, it) }
+        holder.constraint.setOnClickListener { callOnItemClick(holder, it) }
         return holder
     }
 
@@ -36,6 +36,5 @@ class PostsAdapter @Inject constructor() : RecyclerListAdapter<PostEntity, PostV
         override fun areItemsTheSame(oldItem: PostEntity?, newItem: PostEntity?): Boolean {
             return oldItem?.id == newItem?.id
         }
-
     }
 }

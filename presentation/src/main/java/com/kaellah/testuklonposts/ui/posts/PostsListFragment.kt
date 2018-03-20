@@ -8,17 +8,21 @@ import com.artemkopan.recycler.listeners.OnItemClickListener
 import com.kaellah.domain.entity.PostEntity
 import com.kaellah.testuklonposts.R
 import com.kaellah.testuklonposts.dependency.Injectable
-import com.kaellah.testuklonposts.ui.base.BaseActivity
+import com.kaellah.testuklonposts.ui.base.BaseFragment
 import io.reactivex.rxkotlin.addTo
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_posts.*
 import javax.inject.Inject
 
-class PostsListActivity : BaseActivity<PostsViewModel>(), Injectable, OnItemClickListener<PostEntity> {
+class PostsListFragment : BaseFragment<PostsViewModel>(), Injectable, OnItemClickListener<PostEntity> {
+
+    companion object {
+        fun newInstance(): PostsListFragment = PostsListFragment()
+    }
 
     @Inject
     lateinit var adapter: PostsAdapter
 
-    override fun getContentView(): Int = R.layout.activity_main
+    override fun getContentView(): Int = R.layout.fragment_posts
 
     override fun getViewModelClass(): Class<PostsViewModel> = PostsViewModel::class.java
 
@@ -26,41 +30,44 @@ class PostsListActivity : BaseActivity<PostsViewModel>(), Injectable, OnItemClic
         super.onCreate(savedInstanceState)
 
         adapter.setOnItemClickListener(this)
+    }
 
-        swipeRefresh.setOnRefreshListener { getDiscover(true) }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        swipeRefresh.setOnRefreshListener { getPosts(true) }
 
         postsList.adapter = adapter
-        postsList.layoutManager = LinearLayoutManager(this)
+        postsList.layoutManager = LinearLayoutManager(context)
         (postsList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
     }
 
-    override fun onStart() {
-        super.onStart()
-        getDiscover(false)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        getPosts(false)
     }
 
-    private fun getDiscover(fetch: Boolean) {
+    private fun getPosts(fetch: Boolean) {
         viewModel.getPosts(fetch, adapter.list)
-                .doOnSubscribe { onDestroyDisposable.add(it); showContentProgress() }
-                .doFinally({ hideContentProgress() })
+                .doOnSubscribe { onDestroyViewDisposable.add(it); showProgressContent() }
+                .doFinally({ hideProgressContent() })
                 .subscribe({
                                adapter.setList(it.first, false)
                                it.second.dispatchUpdatesTo(adapter)
                            },
-                           { hideContentProgress(); showError(it) })
+                           { hideProgressContent(); showError(it) })
                 .addTo(onStopDisposable)
-
     }
 
     override fun onItemClickListener(view: View?, pos: Int, item: PostEntity?, vararg transactionViews: View?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        // start comments
     }
 
-    override fun showContentProgress() {
-        super.showContentProgress()
+    override fun showProgressContent() {
+        swipeRefresh.isRefreshing = true
     }
 
-    override fun hideContentProgress() {
-        super.hideContentProgress()
+    override fun hideProgressContent() {
+        swipeRefresh.isRefreshing = false
     }
 }

@@ -1,6 +1,6 @@
 package com.kaellah.testuklonposts.dependency.module;
 
-import com.kaellah.testuklonposts.ui.posts.PostsListActivity;
+import com.kaellah.testuklonposts.ui.MainActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -13,5 +13,5 @@ import dagger.android.ContributesAndroidInjector;
 public abstract class ActivityModule {
 
     @ContributesAndroidInjector()
-    abstract PostsListActivity contributeMoviesActivity();
+    abstract MainActivity contributeMainActivity();
 }

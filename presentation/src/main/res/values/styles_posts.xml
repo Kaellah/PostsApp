@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Posts"/>
+
+    <style name="Posts.CardView">
+        <item name="cardCornerRadius">@dimen/radius</item>
+        <item name="cardElevation">@dimen/cardview_default_elevation</item>
+        <item name="cardBackgroundColor">@android:color/white</item>
+    </style>
+
+</resources>

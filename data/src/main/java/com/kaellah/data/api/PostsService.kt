@@ -1,6 +1,6 @@
 package com.kaellah.data.api
 
-//import com.kaellah.data.response.MoviesListResponse
+import com.kaellah.data.response.PostResponse
 import io.reactivex.Single
 import retrofit2.http.GET
 
@@ -9,9 +9,6 @@ import retrofit2.http.GET
  */
 interface PostsService {
 
-//    @GET("movie/now_playing")
-//    fun getPosts(@Query("api_key") apiKey: String, @Query("page") page: Int): Single<Any>
-
     @GET("posts")
-    fun getPosts(): Single<Any>
+    fun getPosts(): Single<List<PostResponse>>
 }

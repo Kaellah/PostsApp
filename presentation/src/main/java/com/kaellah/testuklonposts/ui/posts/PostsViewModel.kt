@@ -11,9 +11,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
-/**
- * @since 12/20/17
- */
+
 class PostsViewModel @Inject constructor(private val getPostsUseCase: GetPostsUseCase) : BaseViewModel() {
 
     private val discoverObserver by lazy(NONE) {

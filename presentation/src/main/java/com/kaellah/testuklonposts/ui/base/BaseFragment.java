@@ -3,73 +3,63 @@ package com.kaellah.testuklonposts.ui.base;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
-import android.transition.Slide;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
-
-import com.artemkopan.utils.ExtraUtils;
-import com.artemkopan.utils.router.Router;
-import com.kaellah.testuklonposts.R;
+import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
-import dagger.Lazy;
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.HasSupportFragmentInjector;
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
-public abstract class BaseActivity<V extends ViewModel> extends AppCompatActivity
-        implements HasSupportFragmentInjector {
-
-    static {
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-    }
+public abstract class BaseFragment<V extends ViewModel> extends Fragment {
 
     protected CompositeDisposable onStopDisposable = new CompositeDisposable();
-    protected CompositeDisposable onDestroyDisposable = new CompositeDisposable();
+    protected CompositeDisposable onDestroyViewDisposable = new CompositeDisposable();
     protected V viewModel;
     @Inject
-    Lazy<DispatchingAndroidInjector<Fragment>> dispatchingAndroidInjector;
-    @Inject
-    ViewModelProvider.Factory viewModelFactory;
+    protected ViewModelProvider.Factory viewModelFactory;
     private PresentationDelegate presentationDelegate;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        presentationDelegate = new PresentationDelegate(this);
-        initViewModel();
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        presentationDelegate = new PresentationDelegate(context);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (getContentView() != View.NO_ID) {
-            setContentView(getContentView());
+            return inflater.inflate(getContentView(), container, false);
+        } else {
+            return super.onCreateView(inflater, container, savedInstanceState);
         }
     }
 
     @Override
-    protected void onStop() {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initViewModel();
+    }
+
+    @Override
+    public void onStop() {
         onStopDisposable.clear();
         super.onStop();
     }
 
     @Override
-    protected void onDestroy() {
-        onDestroyDisposable.clear();
-        ExtraUtils.hideKeyboard(getCurrentFocus());
-        super.onDestroy();
-    }
-
-    @Override
-    public AndroidInjector<Fragment> supportFragmentInjector() {
-        return dispatchingAndroidInjector.get();
+    public void onDestroyView() {
+        onDestroyViewDisposable.clear();
+        super.onDestroyView();
     }
 
     @LayoutRes
@@ -85,7 +75,13 @@ public abstract class BaseActivity<V extends ViewModel> extends AppCompatActivit
             Timber.w("ViewModelFactory is null!!! Please, check your dagger inject logic.");
             return;
         }
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(getViewModelClass());
+        //todo change this to get current fragment. This would be necessary on Sign Screen. Changed Sign Screen on SubComponent and then remove getBaseActivity and use current class (this)
+        viewModel = ViewModelProviders.of(getBaseActivity(), viewModelFactory).get(getViewModelClass());
+    }
+
+
+    public BaseActivity getBaseActivity() {
+        return (BaseActivity) getActivity();
     }
 
     public void showError(Throwable throwable) {
@@ -112,7 +108,7 @@ public abstract class BaseActivity<V extends ViewModel> extends AppCompatActivit
         presentationDelegate.showProgress();
     }
 
-    public void showContentProgress() {
+    public void showProgressContent() {
     }
 
     public void hideProgress() {
@@ -123,16 +119,10 @@ public abstract class BaseActivity<V extends ViewModel> extends AppCompatActivit
         presentationDelegate.hideProgress();
     }
 
-    public void hideContentProgress() {
+    public void hideProgressContent() {
     }
 
     protected void startFragment(@NonNull BaseFragment fragment, boolean addToBackStack) {
-        if (ExtraUtils.postLollipop()) fragment.setReenterTransition(new Slide(Gravity.START));
-        Router.fragment()
-                .useCustomAnim(false)
-                .addToBackStack(addToBackStack)
-                .setIdRes(R.id.frameContainer)
-                .setFragment(fragment)
-                .start(this);
+        getBaseActivity().startFragment(fragment, addToBackStack);
     }
 }

@@ -7,6 +7,7 @@ import com.kaellah.testuklonposts.dependency.module.ActivityModule;
 import com.kaellah.testuklonposts.dependency.module.ApiModule;
 import com.kaellah.testuklonposts.dependency.module.AppModule;
 import com.kaellah.testuklonposts.dependency.module.DataModule;
+import com.kaellah.testuklonposts.dependency.module.FragmentModule;
 import com.kaellah.testuklonposts.dependency.module.NetworkModule;
 import com.kaellah.testuklonposts.dependency.module.ViewModelModule;
 
@@ -26,7 +27,8 @@ import dagger.android.support.AndroidSupportInjectionModule;
         NetworkModule.class,
         DataModule.class,
         ViewModelModule.class,
-        ActivityModule.class})
+        ActivityModule.class,
+        FragmentModule.class})
 public interface AppComponent extends AndroidInjector<BaseApplication> {
 
     @Component.Builder

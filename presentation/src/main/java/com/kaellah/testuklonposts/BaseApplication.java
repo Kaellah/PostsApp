@@ -50,12 +50,6 @@ public class BaseApplication extends DaggerApplication {
 
     private void configLogs() {
         if (BuildConfig.DEBUG) {
-            //Stetho config
-//            Stetho.initialize(newInitializerBuilder(this)
-//                                      .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-//                                      .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
-//                                      .build());
-
             Timber.plant(new DebugTree());
             Logger.addLogAdapter(new AndroidLogAdapter() {
                 @Override
