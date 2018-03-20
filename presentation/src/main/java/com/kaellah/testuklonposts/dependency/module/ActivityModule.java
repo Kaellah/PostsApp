@@ -1,6 +1,6 @@
 package com.kaellah.testuklonposts.dependency.module;
 
-import com.kaellah.testuklonposts.ui.PostsListActivity;
+import com.kaellah.testuklonposts.ui.posts.PostsListActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;

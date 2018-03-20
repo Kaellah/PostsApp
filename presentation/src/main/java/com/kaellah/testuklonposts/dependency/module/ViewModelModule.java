@@ -3,7 +3,7 @@ package com.kaellah.testuklonposts.dependency.module;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
-import com.kaellah.testuklonposts.ui.PostsViewModel;
+import com.kaellah.testuklonposts.ui.posts.PostsViewModel;
 import com.kaellah.testuklonposts.viewmodel.ViewModelFactory;
 
 import java.lang.annotation.Documented;
