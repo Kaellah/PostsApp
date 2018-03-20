@@ -5,7 +5,7 @@ import android.view.View
 import com.artemkopan.recycler.holder.BaseHolder
 import com.kaellah.domain.entity.PostEntity
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_view_post.*
+import kotlinx.android.synthetic.main.item_view.*
 
 
 class PostViewHolder(override val containerView: View) : BaseHolder<PostEntity>(containerView), LayoutContainer {

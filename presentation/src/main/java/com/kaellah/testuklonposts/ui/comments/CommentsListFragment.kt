@@ -1,42 +1,44 @@
-package com.kaellah.testuklonposts.ui.posts
+package com.kaellah.testuklonposts.ui.comments
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SimpleItemAnimator
 import android.view.View
-import com.artemkopan.recycler.listeners.OnItemClickListener
-import com.kaellah.domain.entity.PostEntity
+import com.kaellah.domain.Constants.Extra
 import com.kaellah.testuklonposts.R
 import com.kaellah.testuklonposts.dependency.Injectable
 import com.kaellah.testuklonposts.ui.base.BaseFragment
-import com.kaellah.testuklonposts.ui.comments.CommentsListFragment
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_list.*
 import javax.inject.Inject
 
-class PostsListFragment : BaseFragment<PostsViewModel>(), Injectable, OnItemClickListener<PostEntity> {
+class CommentsListFragment : BaseFragment<CommentsViewModel>(), Injectable {
 
     companion object {
-        fun newInstance(): PostsListFragment = PostsListFragment()
+        fun newInstance(postId: Int) = CommentsListFragment().apply {
+            arguments = Bundle().apply { putInt(Extra.EXTRA_POST_ID, postId) }
+        }
     }
 
+    private var postId: Int = 0
+
     @Inject
-    lateinit var adapter: PostsAdapter
+    lateinit var adapter: CommentsAdapter
 
     override fun getContentView(): Int = R.layout.fragment_list
 
-    override fun getViewModelClass(): Class<PostsViewModel> = PostsViewModel::class.java
+    override fun getViewModelClass(): Class<CommentsViewModel> = CommentsViewModel::class.java
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter.setOnItemClickListener(this)
+        postId = arguments?.getInt(Extra.EXTRA_POST_ID)!!
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.title = getString(R.string.posts_title)
+        toolbar.title = getString(R.string.comments_title)
 
         swipeRefresh.setOnRefreshListener { getPosts(true) }
 
@@ -51,7 +53,8 @@ class PostsListFragment : BaseFragment<PostsViewModel>(), Injectable, OnItemClic
     }
 
     private fun getPosts(fetch: Boolean) {
-        viewModel.getPosts(fetch, adapter.list)
+        viewModel
+                .getComments(postId, fetch, adapter.list)
                 .doOnSubscribe { onDestroyViewDisposable.add(it); showProgressContent() }
                 .doFinally({ hideProgressContent() })
                 .subscribe({
@@ -60,12 +63,6 @@ class PostsListFragment : BaseFragment<PostsViewModel>(), Injectable, OnItemClic
                            },
                            { hideProgressContent(); showError(it) })
                 .addTo(onStopDisposable)
-    }
-
-    override fun onItemClickListener(view: View, pos: Int, item: PostEntity?, vararg transactionViews: View?) {
-        item?.let {
-            startFragment(CommentsListFragment.newInstance(it.id), true)
-        }
     }
 
     override fun showProgressContent() {

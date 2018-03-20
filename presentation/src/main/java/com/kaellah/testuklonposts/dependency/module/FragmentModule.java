@@ -1,6 +1,7 @@
 package com.kaellah.testuklonposts.dependency.module;
 
 
+import com.kaellah.testuklonposts.ui.comments.CommentsListFragment;
 import com.kaellah.testuklonposts.ui.posts.PostsListFragment;
 
 import dagger.Module;
@@ -15,4 +16,7 @@ public abstract class FragmentModule {
 
     @ContributesAndroidInjector()
     abstract PostsListFragment contributePostsListFragment();
+
+    @ContributesAndroidInjector()
+    abstract CommentsListFragment contributeCommentsListFragment();
 }

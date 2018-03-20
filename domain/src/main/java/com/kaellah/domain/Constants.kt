@@ -8,6 +8,6 @@ object Constants {
     }
 
     object Extra {
-        const val EXTRA_MOVIE_ID = "local.EXTRA_MOVIE_ID"
+        const val EXTRA_POST_ID = "local.EXTRA_POST_ID"
     }
 }

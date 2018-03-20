@@ -3,6 +3,7 @@ package com.kaellah.testuklonposts.dependency.module;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
+import com.kaellah.testuklonposts.ui.comments.CommentsViewModel;
 import com.kaellah.testuklonposts.ui.posts.PostsViewModel;
 import com.kaellah.testuklonposts.viewmodel.ViewModelFactory;
 
@@ -24,6 +25,11 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(PostsViewModel.class)
     abstract ViewModel bindPostsViewModel(PostsViewModel viewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CommentsViewModel.class)
+    abstract ViewModel bindCommentsViewModel(CommentsViewModel viewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelFactory factory);

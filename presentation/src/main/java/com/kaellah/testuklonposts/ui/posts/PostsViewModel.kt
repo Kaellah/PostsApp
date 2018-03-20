@@ -14,12 +14,12 @@ import kotlin.LazyThreadSafetyMode.NONE
 
 class PostsViewModel @Inject constructor(private val getPostsUseCase: GetPostsUseCase) : BaseViewModel() {
 
-    private val discoverObserver by lazy(NONE) {
+    private val postsObserver by lazy(NONE) {
         getPostsUseCase.execute().toObservable().replay(1).delegate(onClearedDisposable)
     }
 
     fun getPosts(fetch: Boolean, oldList: MutableList<PostEntity>): Observable<Pair<List<PostEntity>, DiffResult>> {
-        return discoverObserver.connect(fetch)
+        return postsObserver.connect(fetch)
                 .map<List<PostEntity>> { ArrayList<PostEntity>(it) }  //make copy array (necessary for diff utils)
                 .map { it to DiffUtil.calculateDiff(PostsAdapter.Diff(oldList, it)) }
                 .observeOn(AndroidSchedulers.mainThread())
