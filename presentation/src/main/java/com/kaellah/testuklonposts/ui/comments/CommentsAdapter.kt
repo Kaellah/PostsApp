@@ -13,6 +13,11 @@ import javax.inject.Inject
 
 class CommentsAdapter @Inject constructor() : RecyclerListAdapter<CommentEntity, CommentsViewHolder>(Collections.emptyList()) {
 
+    companion object {
+        private const val HEADER = 0
+        private const val ITEM = 1
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentsViewHolder {
         val holder = CommentsViewHolder(ViewUtils.inflateView(parent, R.layout.item_view))
         holder.constraint.setOnClickListener { callOnItemClick(holder, it) }

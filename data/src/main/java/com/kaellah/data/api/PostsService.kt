@@ -16,4 +16,7 @@ interface PostsService {
 
     @GET("posts/{id}/comments")
     fun getComments(@Path("id") postId: Int): Single<List<CommentResponse>>
+
+    @GET("users/{id}")
+    fun getUser(@Path("id") userId: Int): Single<List<CommentResponse>>
 }
