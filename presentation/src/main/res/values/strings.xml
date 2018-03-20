@@ -6,4 +6,9 @@
 
     <string name="posts_title">Posts</string>
     <string name="comments_title">Comments</string>
+
+    <string name="name">Name: %s</string>
+    <string name="phone">Phone: %s</string>
+    <string name="email">Email: %s</string>
+    <string name="company">Company: %s</string>
 </resources>

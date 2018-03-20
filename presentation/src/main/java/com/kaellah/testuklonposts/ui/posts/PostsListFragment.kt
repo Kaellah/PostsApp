@@ -64,7 +64,7 @@ class PostsListFragment : BaseFragment<PostsViewModel>(), Injectable, OnItemClic
 
     override fun onItemClickListener(view: View, pos: Int, item: PostEntity?, vararg transactionViews: View?) {
         item?.let {
-            startFragment(CommentsListFragment.newInstance(it.id), true)
+            startFragment(CommentsListFragment.newInstance(it.id, it.userId), true)
         }
     }
 

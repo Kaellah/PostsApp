@@ -3,16 +3,20 @@ package com.kaellah.testuklonposts.ui.comments
 import android.support.v7.util.DiffUtil
 import android.support.v7.util.DiffUtil.DiffResult
 import com.kaellah.domain.entity.CommentEntity
+import com.kaellah.domain.entity.UserEntity
 import com.kaellah.domain.interactor.comment.GetCommentsUseCase
+import com.kaellah.domain.interactor.comment.GetUserUseCase
 import com.kaellah.domain.util.delegate
 import com.kaellah.testuklonposts.viewmodel.BaseViewModel
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
 
-class CommentsViewModel @Inject constructor(private val getCommentsUseCase: GetCommentsUseCase) : BaseViewModel() {
+class CommentsViewModel @Inject constructor(private val getCommentsUseCase: GetCommentsUseCase,
+                                            private val getUserUseCase:GetUserUseCase) : BaseViewModel() {
 
     private val commentsObserver by lazy(NONE) {
         getCommentsUseCase.execute().toObservable().replay(1).delegate(onClearedDisposable)
@@ -23,6 +27,13 @@ class CommentsViewModel @Inject constructor(private val getCommentsUseCase: GetC
         return commentsObserver.connect(fetch)
                 .map<List<CommentEntity>> { ArrayList<CommentEntity>(it) }  //make copy array (necessary for diff utils)
                 .map { it to DiffUtil.calculateDiff(CommentsAdapter.Diff(oldList, it)) }
+                .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getUser(userId: Int): Single<UserEntity> {
+        return getUserUseCase
+                .apply { this.userId = userId }
+                .execute()
                 .observeOn(AndroidSchedulers.mainThread())
     }
 }

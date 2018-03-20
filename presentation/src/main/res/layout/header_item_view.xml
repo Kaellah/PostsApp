@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/spacing"
+    >
+
+    <TextView
+        android:id="@+id/nameTextView"
+        style="@style/Comments.TextView"
+        tools:text="Name"
+        />
+
+    <TextView
+        android:id="@+id/emailTextView"
+        style="@style/Comments.TextView"
+        app:layout_constraintTop_toBottomOf="@+id/nameTextView"
+        tools:text="Email"
+        />
+
+    <TextView
+        android:id="@+id/phoneTextView"
+        style="@style/Comments.TextView"
+        app:layout_constraintTop_toBottomOf="@+id/emailTextView"
+        tools:text="Phone"
+        />
+
+    <TextView
+        android:id="@+id/companyTextView"
+        style="@style/Comments.TextView"
+        app:layout_constraintTop_toBottomOf="@+id/phoneTextView"
+        tools:text="Company"
+        />
+
+</android.support.constraint.ConstraintLayout>
